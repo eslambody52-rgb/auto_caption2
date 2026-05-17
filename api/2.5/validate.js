@@ -27,6 +27,10 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ status: 'Missing parameters' });
     }
 
+    if (!supabase) {
+        return res.status(500).json({ status: 'Server configuration error (Supabase not initialized)' });
+    }
+
     // Ensure it's explicitly for Auto Caption V2.5
     if (plugin_id !== 'auto_caption_v2.5') {
         return res.status(400).json({ status: 'wrong_plugin' });
