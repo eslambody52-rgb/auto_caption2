@@ -47,8 +47,9 @@ module.exports = async function handler(req, res) {
             return res.status(200).json({ status: 'invalid_serial' });
         }
 
-        // Verify plugin assignment if you use single table, or just ignore if it's dedicated
-        if (license.plugin_id && license.plugin_id !== 'auto_caption_v2.5') {
+        // Verify plugin assignment (supports both plugin_name and plugin_id columns)
+        const dbPlugin = license.plugin_name || license.plugin_id;
+        if (dbPlugin && dbPlugin !== 'Auto Caption' && dbPlugin !== 'auto_caption_v2.5') {
              return res.status(200).json({ status: 'wrong_plugin' });
         }
 
@@ -62,7 +63,7 @@ module.exports = async function handler(req, res) {
             const { error: updateError } = await supabase
                 .from('licenses')
                 .update({ hwid: hwid, status: 'active', activated_at: new Date().toISOString() })
-                .eq('id', license.id);
+                .eq('license_key', license.license_key);
 
             if (updateError) throw updateError;
         } else if (license.hwid !== hwid) {
@@ -76,7 +77,7 @@ module.exports = async function handler(req, res) {
         await supabase
             .from('licenses')
             .update({ session_token: sessionToken, last_seen: new Date().toISOString() })
-            .eq('id', license.id);
+            .eq('license_key', license.license_key);
 
         return res.status(200).json({
             status: 'activated',

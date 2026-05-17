@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
         await supabase
             .from('licenses')
             .update({ last_seen: new Date().toISOString() })
-            .eq('id', license.id);
+            .eq('license_key', license.license_key);
 
         return res.status(200).json({ valid: true });
 
