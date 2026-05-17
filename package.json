@@ -1,0 +1,11 @@
+{
+  "name": "auto-caption-license-server",
+  "version": "2.5.0",
+  "description": "Auto Caption Vibe V2.5 License Backend",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
